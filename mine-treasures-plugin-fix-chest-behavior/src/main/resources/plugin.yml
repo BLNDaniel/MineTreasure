@@ -1,6 +1,11 @@
-name: TreasureChests
+name: Cyber-Chests
 version: 1.0.0
 main: com.danny.treasurechests.TreasureChests
-api-version: '1.20'
+api-version: '1.21'
 author: Jules
 description: A plugin to spawn treasure chests with custom models and loot.
+commands:
+  givetreasureitem:
+    description: Gibt einem Spieler ein Schatz-Item.
+    usage: /givetreasureitem <item> <spieler>
+    permission: treasurechests.give

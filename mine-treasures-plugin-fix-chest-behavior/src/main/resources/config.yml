@@ -164,3 +164,46 @@ loot-tables:
         - material: "DRAGON_EGG"
           amount: 1
           chance: 0.01
+
+# Custom items
+items:
+  luck_boosters:
+    common:
+      display-name: "&fGewöhnlicher Glücks-Booster"
+      lore:
+        - "&7Erhöht die Chance auf Schätze für 10 Minuten."
+      multiplier: 1.5
+      duration: 600
+    rare:
+      display-name: "&9Seltener Glücks-Booster"
+      lore:
+        - "&7Erhöht die Chance auf Schätze für 10 Minuten."
+      multiplier: 2.0
+      duration: 600
+    epic:
+      display-name: "&5Epischer Glücks-Booster"
+      lore:
+        - "&7Erhöht die Chance auf Schätze für 10 Minuten."
+      multiplier: 2.5
+      duration: 600
+    legendary:
+      display-name: "&6Legendärer Glücks-Booster"
+      lore:
+        - "&7Erhöht die Chance auf Schätze für 10 Minuten."
+      multiplier: 3.0
+      duration: 600
+  golden_pickaxe:
+    display-name: "&6Legendäre Spitzhacke"
+    lore:
+      - "&7Garantiert eine legendäre Kiste."
+      - "&7Nur eine Benutzung."
+    enchantments:
+      - "EFFICIENCY:5"
+
+rewards:
+  xp_boost:
+    enabled: true
+    modifier: 2.0
+    duration: 600
+  potions:
+    - "STRENGTH:3:19"

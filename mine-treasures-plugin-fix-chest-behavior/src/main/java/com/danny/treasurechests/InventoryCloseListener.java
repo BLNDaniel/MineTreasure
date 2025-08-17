@@ -5,17 +5,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.UUID;
 
 public class InventoryCloseListener implements Listener {
 
     private final TreasureChestManager treasureChestManager;
+    private final TreasureChests plugin;
     private final DisplayManager displayManager;
 
-    public InventoryCloseListener(TreasureChestManager treasureChestManager, JavaPlugin plugin, DisplayManager displayManager) {
+    public InventoryCloseListener(TreasureChestManager treasureChestManager, TreasureChests plugin, DisplayManager displayManager) {
         this.treasureChestManager = treasureChestManager;
+        this.plugin = plugin;
         this.displayManager = displayManager;
     }
 
@@ -36,5 +37,8 @@ public class InventoryCloseListener implements Listener {
 
         // Despawn the chest regardless of its contents, as requested.
         displayManager.despawnTreasure(location);
+
+        // Apply rewards
+        plugin.getRewardManager().applyRewards(player);
     }
 }
