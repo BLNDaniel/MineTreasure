@@ -101,6 +101,9 @@ public class LootManager {
             AnimationInfo spawnAnimation = parseAnimationInfo(tierSection.getConfigurationSection("animations.spawn"));
             AnimationInfo despawnAnimation = parseAnimationInfo(tierSection.getConfigurationSection("animations.despawn"));
 
+            boolean broadcastEnabled = tierSection.getBoolean("broadcast-enabled", false);
+            String broadcastMessage = tierSection.getString("broadcast-message", "&6&lSCHATZFUND! &e%player% &7hat eine &e%tier% &7Schatztruhe gefunden!");
+
 
             List<LootItem> items = new ArrayList<>();
             List<Map<?, ?>> itemMaps = tierSection.getMapList("items");
@@ -137,7 +140,7 @@ public class LootManager {
                 continue;
             }
 
-            LootTier lootTier = new LootTier(tierName, displayName, headTexture, tierChance, soundInfo, items, spawnAnimation, despawnAnimation);
+            LootTier lootTier = new LootTier(tierName, displayName, headTexture, tierChance, soundInfo, items, spawnAnimation, despawnAnimation, broadcastEnabled, broadcastMessage);
             lootTiers.put(tierName, lootTier);
             totalTierChance += tierChance;
             plugin.getLogger().info("Stufe '" + tierName + "' mit " + items.size() + " Gegenständen geladen.");

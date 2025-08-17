@@ -1,15 +1,15 @@
 package com.danny.treasurechests;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.UUID;
 
 public class InventoryCloseListener implements Listener {
 
@@ -26,38 +26,33 @@ public class InventoryCloseListener implements Listener {
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent event) {
         Player player = (Player) event.getPlayer();
-        Location location = treasureChestManager.getOpenInventoryLocation(player.getUniqueId());
+        UUID playerId = player.getUniqueId();
 
-        // Check if the closed inventory is a treasure chest
-        if (location == null || !treasureChestManager.isTreasureChest(location)) {
-            treasureChestManager.removeOpenInventory(player.getUniqueId());
+        Location location = treasureChestManager.getOpenInventoryLocation(playerId);
+        if (location == null) {
             return;
         }
 
-        Inventory inventory = event.getInventory();
-        boolean isEmpty = true;
-        for (ItemStack item : inventory.getContents()) {
-            if (item != null && item.getType() != Material.AIR) {
-                isEmpty = false;
-                break;
-            }
-        }
+        treasureChestManager.removeOpenInventory(playerId);
 
-        if (isEmpty) {
-            // The chest is empty, remove it
-            TreasureChestManager.TreasureChestData chestData = treasureChestManager.getChestDataAt(location);
-            if (chestData != null) {
-                Entity displayEntity = plugin.getServer().getEntity(chestData.displayId());
-                if (displayEntity != null) {
-                    displayEntity.remove();
+        // Delay the check by one tick to ensure inventory state is updated.
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (!treasureChestManager.isTreasureChest(location)) {
+                    return;
+                }
+
+                // We need to get the inventory again, as the event's inventory might not be safe to use across ticks.
+                Inventory inventory = treasureChestManager.getInventoryAt(location);
+                if (inventory == null) {
+                    return;
+                }
+
+                if (inventory.isEmpty()) {
+                    displayManager.despawnTreasure(location);
                 }
             }
-
-            location.getBlock().setType(Material.AIR);
-            treasureChestManager.removeTreasureChest(location);
-        }
-
-        // Clean up the tracking map
-        treasureChestManager.removeOpenInventory(player.getUniqueId());
+        }.runTaskLater(plugin, 1L);
     }
 }
