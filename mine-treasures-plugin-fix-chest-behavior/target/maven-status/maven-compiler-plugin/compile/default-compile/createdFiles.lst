@@ -15,6 +15,7 @@ com/danny/treasurechests/RewardManager.class
 com/danny/treasurechests/RewardManager$1.class
 com/danny/treasurechests/Animation$AnimationInfo.class
 com/danny/treasurechests/GiveTreasureItemCommand.class
+com/danny/treasurechests/InfinityWaterBucketListener.class
 com/danny/treasurechests/LootItem.class
 com/danny/treasurechests/SoundInfo.class
 com/danny/treasurechests/TreasureChestManager.class

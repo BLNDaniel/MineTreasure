@@ -35,6 +35,8 @@ public class GiveTreasureItemCommand implements CommandExecutor {
             item = plugin.getItemManager().createLuckBooster(itemName);
         } else if (itemName.equalsIgnoreCase("golden_pickaxe")) {
             item = plugin.getItemManager().createGoldenPickaxe();
+        } else if (itemName.equalsIgnoreCase("infinity_water_bucket")) {
+            item = plugin.getItemManager().createInfinityWaterBucket();
         }
 
         if (item == null) {

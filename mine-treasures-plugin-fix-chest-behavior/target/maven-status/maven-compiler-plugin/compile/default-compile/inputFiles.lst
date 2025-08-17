@@ -3,6 +3,7 @@
 /app/mine-treasures-plugin-fix-chest-behavior/src/main/java/com/danny/treasurechests/ItemManager.java
 /app/mine-treasures-plugin-fix-chest-behavior/src/main/java/com/danny/treasurechests/XpBoostInfo.java
 /app/mine-treasures-plugin-fix-chest-behavior/src/main/java/com/danny/treasurechests/LootTier.java
+/app/mine-treasures-plugin-fix-chest-behavior/src/main/java/com/danny/treasurechests/InfinityWaterBucketListener.java
 /app/mine-treasures-plugin-fix-chest-behavior/src/main/java/com/danny/treasurechests/Animation.java
 /app/mine-treasures-plugin-fix-chest-behavior/src/main/java/com/danny/treasurechests/TreasureChests.java
 /app/mine-treasures-plugin-fix-chest-behavior/src/main/java/com/danny/treasurechests/GiveTreasureItemCommand.java

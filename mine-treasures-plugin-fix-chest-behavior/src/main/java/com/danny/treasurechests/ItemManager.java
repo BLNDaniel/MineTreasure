@@ -76,4 +76,30 @@ public class ItemManager {
         item.setItemMeta(meta);
         return item;
     }
+
+    public ItemStack createInfinityWaterBucket() {
+        ConfigurationSection section = plugin.getConfig().getConfigurationSection("items.infinity_water_bucket");
+        if (section == null) {
+            return null;
+        }
+
+        ItemStack item = new ItemStack(Material.WATER_BUCKET);
+        ItemMeta meta = item.getItemMeta();
+
+        meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', section.getString("display-name")));
+
+        List<String> lore = new ArrayList<>();
+        for (String line : section.getStringList("lore")) {
+            lore.add(ChatColor.translateAlternateColorCodes('&', line));
+        }
+        meta.setLore(lore);
+
+        meta.addEnchant(Enchantment.INFINITY, 1, true);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+
+        meta.getPersistentDataContainer().set(plugin.getNamespacedKey("infinity_water_bucket"), PersistentDataType.BOOLEAN, true);
+
+        item.setItemMeta(meta);
+        return item;
+    }
 }

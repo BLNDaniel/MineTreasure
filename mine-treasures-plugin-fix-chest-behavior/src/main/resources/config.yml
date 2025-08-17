@@ -223,3 +223,7 @@ items:
       - "&7Nur eine Benutzung."
     enchantments:
       - "EFFICIENCY:5"
+  infinity_water_bucket:
+    display-name: "&bUnendlicher Wassereimer"
+    lore:
+      - "&7Dieser Eimer geht niemals leer."
