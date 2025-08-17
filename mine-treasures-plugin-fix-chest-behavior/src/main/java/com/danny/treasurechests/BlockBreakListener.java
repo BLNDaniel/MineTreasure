@@ -23,6 +23,10 @@ public class BlockBreakListener implements Listener {
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
+        if (!plugin.getLootManager().areLootTablesLoaded()) {
+            return;
+        }
+
         final Player player = event.getPlayer();
         final Location location = event.getBlock().getLocation();
 

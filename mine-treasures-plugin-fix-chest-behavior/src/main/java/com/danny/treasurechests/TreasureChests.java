@@ -28,7 +28,7 @@ public class TreasureChests extends JavaPlugin {
         this.rewardManager = new RewardManager(this);
 
         // Load loot tables from config
-        this.lootManager.loadLootTables();
+        this.lootManager.loadLootTablesAsync();
 
         // Register event listeners
         getServer().getPluginManager().registerEvents(new BlockBreakListener(this, lootManager, treasureChestManager), this);
@@ -71,6 +71,10 @@ public class TreasureChests extends JavaPlugin {
 
     public TreasureChestManager getTreasureChestManager() {
         return treasureChestManager;
+    }
+
+    public LootManager getLootManager() {
+        return lootManager;
     }
 
     public NamespacedKey getNamespacedKey(String key) {

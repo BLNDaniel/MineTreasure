@@ -3,6 +3,7 @@ package com.danny.treasurechests;
 import com.danny.treasurechests.Animation.AnimationInfo;
 import com.danny.treasurechests.Animation.ParticleEffect;
 import com.danny.treasurechests.Animation.ScaleEffect;
+import org.bukkit.Bukkit;
 import com.danny.treasurechests.Animation.SoundEffect;
 import org.bukkit.Particle;
 import org.bukkit.configuration.ConfigurationSection;
@@ -22,9 +23,14 @@ public class LootManager {
     private final Map<String, LootTier> lootTiers = new HashMap<>();
     private double totalTierChance = 0.0;
     private final Random random = new Random();
+    private volatile boolean lootTablesLoaded = false;
 
     public LootManager(TreasureChests plugin) {
         this.plugin = plugin;
+    }
+
+    public boolean areLootTablesLoaded() {
+        return lootTablesLoaded;
     }
 
     private AnimationInfo parseAnimationInfo(ConfigurationSection section) {
@@ -75,6 +81,12 @@ public class LootManager {
         return new AnimationInfo(soundEffect, particleEffects, scaleEffect);
     }
 
+    public void loadLootTablesAsync() {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+            loadLootTables();
+            lootTablesLoaded = true;
+        });
+    }
 
     public void loadLootTables() {
         plugin.getLogger().info("Lade Beutetabellen...");
