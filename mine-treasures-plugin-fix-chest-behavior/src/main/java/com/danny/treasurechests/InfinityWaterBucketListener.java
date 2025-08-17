@@ -26,6 +26,7 @@ public class InfinityWaterBucketListener implements Listener {
         ItemStack item = event.getItem();
         if (item != null && item.getType() == Material.WATER_BUCKET && item.hasItemMeta()) {
             if (item.getItemMeta().getPersistentDataContainer().has(plugin.getNamespacedKey("infinity_water_bucket"), PersistentDataType.BOOLEAN)) {
+                event.setCancelled(true);
                 Block clickedBlock = event.getClickedBlock();
                 if (clickedBlock != null) {
                     Block targetBlock = clickedBlock.getRelative(event.getBlockFace());
