@@ -1,5 +1,7 @@
 # TreasureChests Configuration
 
+despawn-timer: 60 # in seconds
+
 # The chance (out of 1.0) that a treasure chest will drop when a valid block is broken.
 # For example, 0.05 is a 5% chance.
 drop-chance: 0.05

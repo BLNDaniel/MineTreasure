@@ -64,7 +64,6 @@ public class DisplayManager {
         // Run spawn animation
         runScaleAnimation(itemDisplay, lootResult.getTier().getSpawnAnimation(), true);
         playSound(location, lootResult.getTier().getSpawnAnimation().getSound());
-        plugin.getLogger().info("Erfolgreich einen Schatz an Position " + location.toVector() + " gespawnt");
 
         // Handle broadcast message
         if (lootResult.getTier().isBroadcastEnabled()) {
@@ -79,24 +78,7 @@ public class DisplayManager {
     }
 
     private void scheduleDespawn(Location location) {
-        final long despawnTime = System.currentTimeMillis() + 60000; // 1 minute from now
-
-        // Debug task
-        BukkitTask debugTask = new BukkitRunnable() {
-            @Override
-            public void run() {
-                long remaining = (despawnTime - System.currentTimeMillis()) / 1000;
-                if (remaining <= 0) {
-                    this.cancel();
-                    return;
-                }
-                String message = ChatColor.GOLD + "[TreasureDebug] " + ChatColor.YELLOW + "Kiste bei " +
-                        location.getBlockX() + ", " + location.getBlockY() + ", " + location.getBlockZ() +
-                        " despawned in " + remaining + " Sekunden.";
-                Bukkit.getOnlinePlayers().stream().filter(p -> p.isOp() && p.hasPermission("treasurechests.debug")).forEach(op -> op.sendMessage(message));
-            }
-        }.runTaskTimer(plugin, 0L, 40L); // Every 2 seconds
-        debugTasks.put(location, debugTask);
+        long despawnTime = plugin.getConfig().getLong("despawn-timer", 60) * 20;
 
         // Despawn task
         BukkitTask despawnTask = new BukkitRunnable() {
@@ -104,7 +86,7 @@ public class DisplayManager {
             public void run() {
                 despawnTreasure(location);
             }
-        }.runTaskLater(plugin, 1200L); // 60 seconds
+        }.runTaskLater(plugin, despawnTime);
         despawnTasks.put(location, despawnTask);
     }
 

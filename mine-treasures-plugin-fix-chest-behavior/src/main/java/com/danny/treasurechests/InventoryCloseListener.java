@@ -35,9 +35,6 @@ public class InventoryCloseListener implements Listener {
 
         treasureChestManager.removeOpenInventory(playerId);
 
-        // Despawn the chest regardless of its contents, as requested.
-        displayManager.despawnTreasure(location);
-
         // Apply rewards
         plugin.getRewardManager().applyRewards(player);
     }

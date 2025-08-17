@@ -49,12 +49,16 @@ public class RewardManager {
     }
 
     private void applyXpBoost(Player player, double modifier, int duration) {
+        if (xpBossBars.containsKey(player.getUniqueId())) {
+            return;
+        }
+
         String command = "lp user " + player.getName() + " permission settemp auraskills.multiplier." + modifier + " true " + duration + "s";
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
 
         BossBar bossBar = Bukkit.createBossBar(
-                plugin.getMessageManager().getMessage("xp-boost-bossbar", "%time%", formatTime(duration)),
-                BarColor.GREEN,
+                plugin.getMessageManager().getPlainMessage("xp-boost-bossbar", "%time%", formatTime(duration)),
+                BarColor.PURPLE,
                 BarStyle.SOLID
         );
         bossBar.addPlayer(player);
@@ -74,7 +78,7 @@ public class RewardManager {
                     return;
                 }
                 bossBar.setProgress((double) timeLeft[0] / duration);
-                bossBar.setTitle(plugin.getMessageManager().getMessage("xp-boost-bossbar", "%time%", formatTime(timeLeft[0])));
+                bossBar.setTitle(plugin.getMessageManager().getPlainMessage("xp-boost-bossbar", "%time%", formatTime(timeLeft[0])));
             }
         }.runTaskTimer(plugin, 20, 20);
 

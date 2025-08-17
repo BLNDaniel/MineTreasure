@@ -27,8 +27,8 @@ public class LuckBoosterManager {
         remainingTime.put(player.getUniqueId(), duration);
 
         BossBar bossBar = Bukkit.createBossBar(
-                plugin.getMessageManager().getMessage("luck-booster-bossbar", "%time%", formatTime(duration)),
-                BarColor.YELLOW,
+                plugin.getMessageManager().getPlainMessage("luck-booster-bossbar", "%time%", formatTime(duration)),
+                BarColor.PURPLE,
                 BarStyle.SOLID
         );
         bossBar.addPlayer(player);
@@ -45,7 +45,7 @@ public class LuckBoosterManager {
                 }
                 remainingTime.put(player.getUniqueId(), time);
                 bossBar.setProgress((double) time / duration);
-                bossBar.setTitle(plugin.getMessageManager().getMessage("luck-booster-bossbar", "%time%", formatTime(time)));
+                bossBar.setTitle(plugin.getMessageManager().getPlainMessage("luck-booster-bossbar", "%time%", formatTime(time)));
             }
         }.runTaskTimer(plugin, 20, 20);
 

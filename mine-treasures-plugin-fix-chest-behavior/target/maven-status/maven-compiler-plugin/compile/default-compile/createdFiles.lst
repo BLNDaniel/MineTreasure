@@ -11,7 +11,6 @@ com/danny/treasurechests/ItemManager.class
 com/danny/treasurechests/DisplayManager$1.class
 com/danny/treasurechests/TreasureChests.class
 com/danny/treasurechests/RewardManager.class
-com/danny/treasurechests/DisplayManager$4.class
 com/danny/treasurechests/RewardManager$1.class
 com/danny/treasurechests/Animation$AnimationInfo.class
 com/danny/treasurechests/GiveTreasureItemCommand.class
