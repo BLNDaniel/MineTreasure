@@ -68,6 +68,10 @@ public class TreasureChests extends JavaPlugin {
         return rewardManager;
     }
 
+    public TreasureChestManager getTreasureChestManager() {
+        return treasureChestManager;
+    }
+
     public NamespacedKey getNamespacedKey(String key) {
         return new NamespacedKey(this, key);
     }

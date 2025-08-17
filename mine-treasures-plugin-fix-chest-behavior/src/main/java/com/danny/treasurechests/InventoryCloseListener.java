@@ -36,6 +36,6 @@ public class InventoryCloseListener implements Listener {
         treasureChestManager.removeOpenInventory(playerId);
 
         // Apply rewards
-        plugin.getRewardManager().applyRewards(player);
+        plugin.getRewardManager().applyRewards(player, location);
     }
 }

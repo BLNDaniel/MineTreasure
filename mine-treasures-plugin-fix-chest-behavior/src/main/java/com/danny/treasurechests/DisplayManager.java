@@ -74,11 +74,11 @@ public class DisplayManager {
         }
 
         // Schedule despawn and debug tasks
-        scheduleDespawn(location);
+        scheduleDespawn(location, lootResult.getTier());
     }
 
-    private void scheduleDespawn(Location location) {
-        long despawnTime = plugin.getConfig().getLong("despawn-timer", 60) * 20;
+    private void scheduleDespawn(Location location, LootTier tier) {
+        long despawnTime = tier.getDespawnTimer() * 20;
 
         // Despawn task
         BukkitTask despawnTask = new BukkitRunnable() {

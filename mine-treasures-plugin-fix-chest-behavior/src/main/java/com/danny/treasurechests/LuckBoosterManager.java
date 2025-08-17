@@ -38,7 +38,7 @@ public class LuckBoosterManager {
             @Override
             public void run() {
                 int time = remainingTime.get(player.getUniqueId()) - 1;
-                if (time <= 0) {
+                if (time < 0) {
                     deactivateBooster(player);
                     cancel();
                     return;

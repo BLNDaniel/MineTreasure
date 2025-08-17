@@ -1,6 +1,7 @@
 package com.danny.treasurechests;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
@@ -23,28 +24,19 @@ public class RewardManager {
         this.plugin = plugin;
     }
 
-    public void applyRewards(Player player) {
-        ConfigurationSection rewardsSection = plugin.getConfig().getConfigurationSection("rewards");
-        if (rewardsSection == null) {
+    public void applyRewards(Player player, Location location) {
+        TreasureChestManager.TreasureChestData chestData = plugin.getTreasureChestManager().getChestDataAt(location);
+        if (chestData == null) {
+            return;
+        }
+        LootTier tier = chestData.tier();
+        if (tier == null) {
             return;
         }
 
-        if (rewardsSection.getBoolean("xp_boost.enabled", false)) {
-            double modifier = rewardsSection.getDouble("xp_boost.modifier", 2.0);
-            int duration = rewardsSection.getInt("xp_boost.duration", 600);
-            applyXpBoost(player, modifier, duration);
-        }
-
-        for (String potionString : rewardsSection.getStringList("potions")) {
-            String[] parts = potionString.split(":");
-            if (parts.length == 3) {
-                PotionEffectType type = PotionEffectType.getByName(parts[0]);
-                int amplifier = Integer.parseInt(parts[1]) - 1;
-                int duration = Integer.parseInt(parts[2]) * 20; // in ticks
-                if (type != null) {
-                    player.addPotionEffect(new PotionEffect(type, duration, amplifier));
-                }
-            }
+        XpBoostInfo xpBoostInfo = tier.getXpBoostInfo();
+        if (xpBoostInfo != null && xpBoostInfo.enabled()) {
+            applyXpBoost(player, xpBoostInfo.modifier(), xpBoostInfo.duration());
         }
     }
 
@@ -69,7 +61,7 @@ public class RewardManager {
             @Override
             public void run() {
                 timeLeft[0]--;
-                if (timeLeft[0] <= 0) {
+                if (timeLeft[0] < 0) {
                     BossBar bb = xpBossBars.remove(player.getUniqueId());
                     if (bb != null) {
                         bb.removePlayer(player);

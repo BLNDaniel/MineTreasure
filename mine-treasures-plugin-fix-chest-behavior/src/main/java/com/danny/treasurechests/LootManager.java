@@ -92,6 +92,7 @@ public class LootManager {
             if (tierSection == null) continue;
 
             double tierChance = tierSection.getDouble("chance");
+            int despawnTimer = tierSection.getInt("despawn-timer", 60);
             String displayName = tierSection.getString("display-name", tierName);
             String headTexture = tierSection.getString("head-texture", "");
 
@@ -104,6 +105,16 @@ public class LootManager {
 
             boolean broadcastEnabled = tierSection.getBoolean("broadcast-enabled", false);
             String broadcastMessage = tierSection.getString("broadcast-message", "&6&lSCHATZFUND! &e%player% &7hat eine &e%tier% &7Schatztruhe gefunden!");
+
+            ConfigurationSection xpBoostSection = tierSection.getConfigurationSection("xp_boost");
+            XpBoostInfo xpBoostInfo = null;
+            if (xpBoostSection != null) {
+                xpBoostInfo = new XpBoostInfo(
+                        xpBoostSection.getBoolean("enabled"),
+                        xpBoostSection.getDouble("modifier"),
+                        xpBoostSection.getInt("duration")
+                );
+            }
 
 
             List<LootItem> items = new ArrayList<>();
@@ -118,6 +129,7 @@ public class LootManager {
                         continue;
                     }
 
+                    String customItem = (String) itemMap.get("custom-item");
                     String amount = "1";
                     Object amountObj = itemMap.get("amount");
                     if (amountObj != null) {
@@ -130,7 +142,7 @@ public class LootManager {
                         chance = ((Number) chanceObj).doubleValue();
                     }
 
-                    items.add(new LootItem(material, amount, chance));
+                    items.add(new LootItem(material, customItem, amount, chance));
                 } catch (Exception e) {
                     plugin.getLogger().severe(plugin.getMessageManager().getMessage("config-error", "%path%", "items", "%error%", e.getMessage()));
                 }
@@ -141,7 +153,7 @@ public class LootManager {
                 continue;
             }
 
-            LootTier lootTier = new LootTier(tierName, displayName, headTexture, tierChance, soundInfo, items, spawnAnimation, despawnAnimation, broadcastEnabled, broadcastMessage);
+            LootTier lootTier = new LootTier(tierName, displayName, headTexture, tierChance, despawnTimer, soundInfo, items, spawnAnimation, despawnAnimation, broadcastEnabled, broadcastMessage, xpBoostInfo);
             lootTiers.put(tierName, lootTier);
             totalTierChance += tierChance;
             plugin.getLogger().info("Stufe '" + tierName + "' mit " + items.size() + " Gegenständen geladen.");
@@ -249,6 +261,13 @@ public class LootManager {
     }
 
     private ItemStack createItemStack(LootItem item) {
+        if (item.getCustomItem() != null) {
+            if (plugin.getConfig().getConfigurationSection("items.luck_boosters").getKeys(false).contains(item.getCustomItem())) {
+                return plugin.getItemManager().createLuckBooster(item.getCustomItem());
+            } else if (item.getCustomItem().equalsIgnoreCase("golden_pickaxe")) {
+                return plugin.getItemManager().createGoldenPickaxe();
+            }
+        }
         return new ItemStack(item.getMaterial(), parseAmount(item.getAmount()));
     }
 

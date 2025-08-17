@@ -6,6 +6,7 @@ com/danny/treasurechests/MessageManager.class
 com/danny/treasurechests/Animation$SoundEffect.class
 com/danny/treasurechests/InventoryCloseListener.class
 com/danny/treasurechests/BlockPlaceListener.class
+com/danny/treasurechests/XpBoostInfo.class
 com/danny/treasurechests/TreasureChestManager$TreasureChestData.class
 com/danny/treasurechests/ItemManager.class
 com/danny/treasurechests/DisplayManager$1.class

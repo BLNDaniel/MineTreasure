@@ -1,7 +1,5 @@
 # TreasureChests Configuration
 
-despawn-timer: 60 # in seconds
-
 # The chance (out of 1.0) that a treasure chest will drop when a valid block is broken.
 # For example, 0.05 is a 5% chance.
 drop-chance: 0.05
@@ -25,6 +23,7 @@ loot-tables:
       display-name: "&aGewöhnliche Kiste"
       head-texture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvM2Y2NmY3ZjAzMTI1Y2Y1NDczMzY5NmYzNjMyZjBkOWU2NDcwYmFhYjg0OTg0N2VhNWVhMmQ3OTE1NmFkMGY0MCJ9fX0="
       chance: 0.50
+      despawn-timer: 60
       broadcast-enabled: false
       broadcast-message: "&6&lSCHATZFUND! &e%player% &7hat eine &e%tier% &7Schatztruhe gefunden!"
       sound:
@@ -50,10 +49,15 @@ loot-tables:
         - material: "COAL"
           amount: "4-8"
           chance: 0.9
+      xp_boost:
+        enabled: true
+        modifier: 1.5
+        duration: 300
     rare:
       display-name: "&9Seltene Kiste"
       head-texture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvM2Y2NmY3ZjAzMTI1Y2Y1NDczMzY5NmYzNjMyZjBkOWU2NDcwYmFhYjg0OTg0N2VhNWVhMmQ3OTE1NmFkMGY0MCJ9fX0="
       chance: 0.25
+      despawn-timer: 120
       broadcast-enabled: false
       broadcast-message: "&6&lSCHATZFUND! &e%player% &7hat eine &e%tier% &7Schatztruhe gefunden!"
       sound:
@@ -79,10 +83,15 @@ loot-tables:
         - material: "IRON_PICKAXE"
           amount: 1
           chance: 0.4
+      xp_boost:
+        enabled: true
+        modifier: 2.0
+        duration: 600
     epic:
       display-name: "&5Epische Kiste"
       head-texture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvM2Y2NmY3ZjAzMTI1Y2Y1NDczMzY5NmYzNjMyZjBkOWU2NDcwYmFhYjg0OTg0N2VhNWVhMmQ3OTE1NmFkMGY0MCJ9fX0="
       chance: 0.15
+      despawn-timer: 180
       broadcast-enabled: true
       broadcast-message: "&6&lSCHATZFUND! &e%player% &7hat eine &e%tier% &7Schatztruhe gefunden!"
       sound:
@@ -108,10 +117,15 @@ loot-tables:
         - material: "EXPERIENCE_BOTTLE"
           amount: "8-16"
           chance: 0.8
+      xp_boost:
+        enabled: true
+        modifier: 2.5
+        duration: 900
     legendary:
       display-name: "&6Legendäre Kiste"
       head-texture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvM2Y2NmY3ZjAzMTI1Y2Y1NDczMzY5NmYzNjMyZjBkOWU2NDcwYmFhYjg0OTg0N2VhNWVhMmQ3OTE1NmFkMGY0MCJ9fX0="
       chance: 0.08
+      despawn-timer: 240
       broadcast-enabled: true
       broadcast-message: "&6&lSCHATZFUND! &e%player% &7hat eine &e%tier% &7Schatztruhe gefunden!"
       sound:
@@ -137,10 +151,15 @@ loot-tables:
         - material: "BEACON"
           amount: 1
           chance: 0.05
+      xp_boost:
+        enabled: true
+        modifier: 3.0
+        duration: 1200
     mythical:
       display-name: "&dMythische Kiste"
       head-texture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvM2Y2NmY3ZjAzMTI1Y2Y1NDczMzY5NmYzNjMyZjBkOWU2NDcwYmFhYjg0OTg0N2VhNWVhMmQ3OTE1NmFkMGY0MCJ9fX0="
       chance: 0.02
+      despawn-timer: 300
       broadcast-enabled: true
       broadcast-message: "&6&lSCHATZFUND! &e%player% &7hat eine &e%tier% &7Schatztruhe gefunden!"
       sound:
@@ -166,7 +185,10 @@ loot-tables:
         - material: "DRAGON_EGG"
           amount: 1
           chance: 0.01
-
+      xp_boost:
+        enabled: true
+        modifier: 4.0
+        duration: 1800
 # Custom items
 items:
   luck_boosters:
@@ -201,11 +223,3 @@ items:
       - "&7Nur eine Benutzung."
     enchantments:
       - "EFFICIENCY:5"
-
-rewards:
-  xp_boost:
-    enabled: true
-    modifier: 2.0
-    duration: 600
-  potions:
-    - "STRENGTH:3:19"
