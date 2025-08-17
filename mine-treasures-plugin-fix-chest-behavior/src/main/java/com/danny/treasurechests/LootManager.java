@@ -260,26 +260,32 @@ public class LootManager {
             return null;
         }
 
-        // Shuffle items to avoid bias towards items listed first in the config
-        List<LootItem> shuffledItems = new ArrayList<>(tier.getItems());
-        Collections.shuffle(shuffledItems, random);
-
-        for (LootItem item : shuffledItems) {
+        List<LootItem> successfulItems = new ArrayList<>();
+        for (LootItem item : tier.getItems()) {
             if (random.nextDouble() < item.getChance()) {
-                return item; // Return the first item that passes its chance roll
+                successfulItems.add(item);
             }
         }
 
-        return null; // If no item passes its chance roll, return null for this roll.
+        if (successfulItems.isEmpty()) {
+            return null;
+        }
+
+        return successfulItems.get(random.nextInt(successfulItems.size()));
     }
 
     private ItemStack createItemStack(LootItem item) {
         if (item.getCustomItem() != null) {
-            if (plugin.getConfig().getConfigurationSection("items.luck_boosters").getKeys(false).contains(item.getCustomItem())) {
-                return plugin.getItemManager().createLuckBooster(item.getCustomItem());
-            } else if (item.getCustomItem().equalsIgnoreCase("golden_pickaxe")) {
+            String customItem = item.getCustomItem();
+            for (String tier : plugin.getConfig().getConfigurationSection("items.luck_boosters").getKeys(false)) {
+                if (customItem.equalsIgnoreCase(tier) || customItem.equalsIgnoreCase(tier + "_luck_booster")) {
+                    return plugin.getItemManager().createLuckBooster(tier);
+                }
+            }
+
+            if (customItem.equalsIgnoreCase("golden_pickaxe")) {
                 return plugin.getItemManager().createGoldenPickaxe();
-            } else if (item.getCustomItem().equalsIgnoreCase("infinity_water_bucket")) {
+            } else if (customItem.equalsIgnoreCase("infinity_water_bucket")) {
                 return plugin.getItemManager().createInfinityWaterBucket();
             }
         }

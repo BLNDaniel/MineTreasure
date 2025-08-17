@@ -45,7 +45,13 @@ public class RewardManager {
             return;
         }
 
-        String command = "lp user " + player.getName() + " permission settemp auraskills.multiplier." + modifier + " true " + duration + "s";
+        String modifierString;
+        if (modifier == (int) modifier) {
+            modifierString = String.valueOf((int) modifier);
+        } else {
+            modifierString = String.valueOf(modifier);
+        }
+        String command = "lp user " + player.getName() + " permission settemp auraskills.multiplier." + modifierString + " true " + duration + "s";
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
 
         BossBar bossBar = Bukkit.createBossBar(
