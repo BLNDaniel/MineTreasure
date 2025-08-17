@@ -109,9 +109,6 @@ public class DisplayManager {
     }
 
     public void despawnTreasure(Location location) {
-        if (treasureChestManager.isDespawning(location)) return;
-        treasureChestManager.setDespawning(location);
-
         // Cancel tasks
         if (debugTasks.containsKey(location)) {
             debugTasks.get(location).cancel();
