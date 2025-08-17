@@ -1,6 +1,7 @@
 package com.danny.treasurechests;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
@@ -22,7 +23,7 @@ public class TreasureChestManager {
         treasureChests.put(location, data);
 
         // Create and populate the inventory
-        Inventory barrelInventory = Bukkit.createInventory(null, InventoryType.BARREL, data.tier().getDisplayName());
+        Inventory barrelInventory = Bukkit.createInventory(null, InventoryType.BARREL, ChatColor.translateAlternateColorCodes('&', data.tier().getDisplayName()));
 
         // Place items in random slots
         List<Integer> slots = new ArrayList<>();
