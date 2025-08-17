@@ -25,6 +25,7 @@ public class TreasureChests extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new BlockBreakListener(this, lootManager, treasureChestManager), this);
         getServer().getPluginManager().registerEvents(new BarrierInteractListener(treasureChestManager), this);
         getServer().getPluginManager().registerEvents(new BlockPlaceListener(this, treasureChestManager), this);
+        getServer().getPluginManager().registerEvents(new InventoryCloseListener(treasureChestManager, this, displayManager), this);
 
         getLogger().info("TreasureChests wurde aktiviert!");
     }
