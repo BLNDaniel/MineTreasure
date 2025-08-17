@@ -247,6 +247,7 @@ items:
 
 # Potions can be added to loot tables like this:
 # - material: "POTION"
+#   display-name: "&cTrank der Stärke"
 #   potion-effects:
 #     - "STRENGTH:2:60" # Effect:Amplifier:Duration(seconds)
 #   amount: 1

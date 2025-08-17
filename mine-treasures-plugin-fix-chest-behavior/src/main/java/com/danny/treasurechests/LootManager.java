@@ -142,6 +142,7 @@ public class LootManager {
                     }
 
                     String customItem = (String) itemMap.get("custom-item");
+                    String itemDisplayName = (String) itemMap.get("display-name");
                     java.util.List<String> potionEffects = (java.util.List<String>) itemMap.get("potion-effects");
                     String amount = "1";
                     Object amountObj = itemMap.get("amount");
@@ -155,7 +156,7 @@ public class LootManager {
                         chance = ((Number) chanceObj).doubleValue();
                     }
 
-                    items.add(new LootItem(material, customItem, amount, chance, potionEffects));
+                    items.add(new LootItem(material, customItem, itemDisplayName, amount, chance, potionEffects));
                 } catch (Exception e) {
                     plugin.getLogger().severe(plugin.getMessageManager().getMessage("config-error", "%path%", "items", "%error%", e.getMessage()));
                 }
@@ -293,6 +294,9 @@ public class LootManager {
         if (item.getMaterial() == org.bukkit.Material.POTION && item.getPotionEffects() != null) {
             ItemStack potion = new ItemStack(item.getMaterial(), parseAmount(item.getAmount()));
             org.bukkit.inventory.meta.PotionMeta meta = (org.bukkit.inventory.meta.PotionMeta) potion.getItemMeta();
+            if (item.getDisplayName() != null) {
+                meta.setDisplayName(org.bukkit.ChatColor.translateAlternateColorCodes('&', item.getDisplayName()));
+            }
             for (String effect : item.getPotionEffects()) {
                 String[] parts = effect.split(":");
                 if (parts.length == 3) {
