@@ -24,6 +24,7 @@ item-given: "&aGegenstand an %player% gegeben."
 
 # Luck booster messages
 luck-booster-activated: "&aGlücks-Booster aktiviert! Du hast eine erhöhte Chance, Schätze für %time% Minuten zu finden."
+luck-booster-already-active: "&cDu hast bereits einen aktiven Glücks-Booster."
 luck-booster-bossbar: "&eVerbleibende Glücks-Booster Zeit: %time%"
 
 # XP boost messages

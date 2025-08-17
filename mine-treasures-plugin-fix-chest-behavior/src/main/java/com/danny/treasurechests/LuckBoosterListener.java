@@ -28,6 +28,12 @@ public class LuckBoosterListener implements Listener {
         ItemMeta meta = item.getItemMeta();
         if (meta.getPersistentDataContainer().has(plugin.getNamespacedKey("luck_booster_tier"), PersistentDataType.STRING)) {
             event.setCancelled(true);
+
+            if (plugin.getLuckBoosterManager().hasBooster(player)) {
+                player.sendMessage(plugin.getMessageManager().getMessage("luck-booster-already-active"));
+                return;
+            }
+
             String tier = meta.getPersistentDataContainer().get(plugin.getNamespacedKey("luck_booster_tier"), PersistentDataType.STRING);
 
             double multiplier = plugin.getConfig().getDouble("items.luck_boosters." + tier + ".multiplier");

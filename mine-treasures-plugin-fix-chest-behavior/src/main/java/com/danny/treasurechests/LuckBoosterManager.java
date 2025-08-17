@@ -65,6 +65,10 @@ public class LuckBoosterManager {
         return luckBoosters.getOrDefault(player.getUniqueId(), 1.0);
     }
 
+    public boolean hasBooster(Player player) {
+        return luckBoosters.containsKey(player.getUniqueId());
+    }
+
     private String formatTime(int seconds) {
         int minutes = seconds / 60;
         int remainingSeconds = seconds % 60;
