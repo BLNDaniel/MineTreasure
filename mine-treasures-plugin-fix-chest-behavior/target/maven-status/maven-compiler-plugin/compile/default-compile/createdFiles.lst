@@ -3,11 +3,13 @@ com/danny/treasurechests/DisplayManager.class
 com/danny/treasurechests/BarrierInteractListener.class
 com/danny/treasurechests/Animation$SoundEffect.class
 com/danny/treasurechests/InventoryCloseListener.class
+com/danny/treasurechests/InventoryClickListener.class
 com/danny/treasurechests/BlockPlaceListener.class
 com/danny/treasurechests/TreasureChestManager$TreasureChestData.class
 com/danny/treasurechests/DisplayManager$1.class
 com/danny/treasurechests/TreasureChests.class
 com/danny/treasurechests/DisplayManager$4.class
+com/danny/treasurechests/InventoryClickListener$1.class
 com/danny/treasurechests/Animation$AnimationInfo.class
 com/danny/treasurechests/LootItem.class
 com/danny/treasurechests/TreasureChestManager.class

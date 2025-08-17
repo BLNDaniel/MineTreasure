@@ -30,12 +30,11 @@ loot-tables:
         broadcast: false
       animations:
         spawn:
-          sound: { name: "BLOCK_CHEST_OPEN", volume: 0.5, pitch: 1.5 }
+          sound: { name: "ENTITY_PLAYER_LEVELUP", volume: 0.5, pitch: 1.5 }
           particles:
             - { type: "CLOUD", count: 15, speed: 0.05 }
           scale: { from: 0.1, to: 2.8, duration: 10 }
         despawn:
-          sound: { name: "BLOCK_CHEST_CLOSE", volume: 0.5, pitch: 1.5 }
           particles:
             - { type: "SMOKE_NORMAL", count: 15, speed: 0.05 }
           scale: { from: 2.8, to: 0.0, duration: 10 }
@@ -60,12 +59,11 @@ loot-tables:
         broadcast: false
       animations:
         spawn:
-          sound: { name: "BLOCK_CHEST_OPEN", volume: 0.5, pitch: 1.5 }
+          sound: { name: "ENTITY_PLAYER_LEVELUP", volume: 0.5, pitch: 1.5 }
           particles:
             - { type: "CLOUD", count: 15, speed: 0.05 }
           scale: { from: 0.1, to: 2.8, duration: 10 }
         despawn:
-          sound: { name: "BLOCK_CHEST_CLOSE", volume: 0.5, pitch: 1.5 }
           particles:
             - { type: "SMOKE_NORMAL", count: 15, speed: 0.05 }
           scale: { from: 2.8, to: 0.0, duration: 10 }
@@ -90,12 +88,11 @@ loot-tables:
         broadcast: true
       animations:
         spawn:
-          sound: { name: "BLOCK_CHEST_OPEN", volume: 0.5, pitch: 1.5 }
+          sound: { name: "ENTITY_PLAYER_LEVELUP", volume: 0.5, pitch: 1.5 }
           particles:
             - { type: "CLOUD", count: 15, speed: 0.05 }
           scale: { from: 0.1, to: 2.8, duration: 10 }
         despawn:
-          sound: { name: "BLOCK_CHEST_CLOSE", volume: 0.5, pitch: 1.5 }
           particles:
             - { type: "SMOKE_NORMAL", count: 15, speed: 0.05 }
           scale: { from: 2.8, to: 0.0, duration: 10 }
@@ -120,12 +117,11 @@ loot-tables:
         broadcast: true
       animations:
         spawn:
-          sound: { name: "BLOCK_CHEST_OPEN", volume: 0.5, pitch: 1.5 }
+          sound: { name: "ENTITY_PLAYER_LEVELUP", volume: 0.5, pitch: 1.5 }
           particles:
             - { type: "CLOUD", count: 15, speed: 0.05 }
           scale: { from: 0.1, to: 2.8, duration: 10 }
         despawn:
-          sound: { name: "BLOCK_CHEST_CLOSE", volume: 0.5, pitch: 1.5 }
           particles:
             - { type: "SMOKE_NORMAL", count: 15, speed: 0.05 }
           scale: { from: 2.8, to: 0.0, duration: 10 }
@@ -150,12 +146,11 @@ loot-tables:
         broadcast: true
       animations:
         spawn:
-          sound: { name: "BLOCK_CHEST_OPEN", volume: 0.5, pitch: 1.5 }
+          sound: { name: "ENTITY_PLAYER_LEVELUP", volume: 0.5, pitch: 1.5 }
           particles:
             - { type: "CLOUD", count: 15, speed: 0.05 }
           scale: { from: 0.1, to: 2.8, duration: 10 }
         despawn:
-          sound: { name: "BLOCK_CHEST_CLOSE", volume: 0.5, pitch: 1.5 }
           particles:
             - { type: "SMOKE_NORMAL", count: 15, speed: 0.05 }
           scale: { from: 2.8, to: 0.0, duration: 10 }

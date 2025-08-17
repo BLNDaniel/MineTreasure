@@ -17,6 +17,7 @@ public class TreasureChestManager {
     private final Map<Location, Inventory> treasureChestInventories = new HashMap<>();
     private final Set<Location> playerPlacedBlocks = new HashSet<>();
     private final Map<UUID, Location> openInventories = new HashMap<>();
+    private final Set<Location> despawningChests = new HashSet<>();
 
 
     public void addTreasureChest(Location location, TreasureChestData data) {
@@ -42,6 +43,7 @@ public class TreasureChestManager {
     public void removeTreasureChest(Location location) {
         treasureChests.remove(location);
         treasureChestInventories.remove(location);
+        despawningChests.remove(location);
     }
 
     public TreasureChestData getChestDataAt(Location location) {
@@ -78,5 +80,13 @@ public class TreasureChestManager {
 
     public void removeOpenInventory(UUID playerId) {
         openInventories.remove(playerId);
+    }
+
+    public boolean isDespawning(Location location) {
+        return despawningChests.contains(location);
+    }
+
+    public void setDespawning(Location location) {
+        despawningChests.add(location);
     }
 }
