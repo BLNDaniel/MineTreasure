@@ -49,6 +49,23 @@ loot-tables:
         - material: "COAL"
           amount: "4-8"
           chance: 0.9
+        - material: "YELLOW_DYE"
+          custom-item: "common_luck_booster"
+          amount: 1
+          chance: 0.1
+        - material: "GOLDEN_PICKAXE"
+          custom-item: "golden_pickaxe"
+          amount: 1
+          chance: 0.05
+        - material: "WATER_BUCKET"
+          custom-item: "infinity_water_bucket"
+          amount: 1
+          chance: 0.05
+        - material: "POTION"
+          potion-effects:
+            - "STRENGTH:2:60"
+          amount: 1
+          chance: 0.1
       xp_boost:
         enabled: true
         modifier: 1.5
