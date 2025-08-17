@@ -66,6 +66,14 @@ public class DisplayManager {
         playSound(location, lootResult.getTier().getSpawnAnimation().getSound());
         plugin.getLogger().info("Erfolgreich einen Schatz an Position " + location.toVector() + " gespawnt");
 
+        // Handle broadcast message
+        if (lootResult.getTier().isBroadcastEnabled()) {
+            String message = lootResult.getTier().getBroadcastMessage()
+                .replace("%player%", player.getName())
+                .replace("%tier%", lootResult.getTier().getDisplayName());
+            Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', message));
+        }
+
         // Schedule despawn and debug tasks
         scheduleDespawn(location);
     }
