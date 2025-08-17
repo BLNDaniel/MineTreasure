@@ -11,11 +11,13 @@ public class LootTier {
     private final String headTexture;
     private final double chance;
     private final SoundInfo soundInfo;
+    private final boolean broadcastEnabled;
+    private final String broadcastMessage;
     private final List<LootItem> items;
     private final AnimationInfo spawnAnimation;
     private final AnimationInfo despawnAnimation;
 
-    public LootTier(String name, String displayName, String headTexture, double chance, SoundInfo soundInfo, List<LootItem> items, AnimationInfo spawnAnimation, AnimationInfo despawnAnimation) {
+    public LootTier(String name, String displayName, String headTexture, double chance, SoundInfo soundInfo, List<LootItem> items, AnimationInfo spawnAnimation, AnimationInfo despawnAnimation, boolean broadcastEnabled, String broadcastMessage) {
         this.name = name;
         this.displayName = displayName;
         this.headTexture = headTexture;
@@ -24,6 +26,8 @@ public class LootTier {
         this.items = items;
         this.spawnAnimation = spawnAnimation;
         this.despawnAnimation = despawnAnimation;
+        this.broadcastEnabled = broadcastEnabled;
+        this.broadcastMessage = broadcastMessage;
     }
 
     public String getName() {
@@ -56,5 +60,13 @@ public class LootTier {
 
     public AnimationInfo getDespawnAnimation() {
         return despawnAnimation;
+    }
+
+    public boolean isBroadcastEnabled() {
+        return broadcastEnabled;
+    }
+
+    public String getBroadcastMessage() {
+        return broadcastMessage;
     }
 }

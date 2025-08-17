@@ -1,23 +1,20 @@
 package com.danny.treasurechests;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.UUID;
 
 public class InventoryCloseListener implements Listener {
 
     private final TreasureChestManager treasureChestManager;
-    private final JavaPlugin plugin;
+    private final TreasureChests plugin;
     private final DisplayManager displayManager;
 
-    public InventoryCloseListener(TreasureChestManager treasureChestManager, JavaPlugin plugin, DisplayManager displayManager) {
+    public InventoryCloseListener(TreasureChestManager treasureChestManager, TreasureChests plugin, DisplayManager displayManager) {
         this.treasureChestManager = treasureChestManager;
         this.plugin = plugin;
         this.displayManager = displayManager;
@@ -25,39 +22,23 @@ public class InventoryCloseListener implements Listener {
 
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent event) {
+        if (!(event.getPlayer() instanceof Player)) {
+            return;
+        }
         Player player = (Player) event.getPlayer();
-        Location location = treasureChestManager.getOpenInventoryLocation(player.getUniqueId());
+        UUID playerId = player.getUniqueId();
 
-        // Check if the closed inventory is a treasure chest
-        if (location == null || !treasureChestManager.isTreasureChest(location)) {
-            treasureChestManager.removeOpenInventory(player.getUniqueId());
+        Location location = treasureChestManager.getOpenInventoryLocation(playerId);
+        if (location == null) {
             return;
         }
 
-        Inventory inventory = event.getInventory();
-        boolean isEmpty = true;
-        for (ItemStack item : inventory.getContents()) {
-            if (item != null && item.getType() != Material.AIR) {
-                isEmpty = false;
-                break;
-            }
-        }
+        treasureChestManager.removeOpenInventory(playerId);
 
-        if (isEmpty) {
-            // The chest is empty, remove it
-            TreasureChestManager.TreasureChestData chestData = treasureChestManager.getChestDataAt(location);
-            if (chestData != null) {
-                Entity displayEntity = plugin.getServer().getEntity(chestData.displayId());
-                if (displayEntity != null) {
-                    displayEntity.remove();
-                }
-            }
+        // Despawn the chest regardless of its contents, as requested.
+        displayManager.despawnTreasure(location);
 
-            location.getBlock().setType(Material.AIR);
-            treasureChestManager.removeTreasureChest(location);
-        }
-
-        // Clean up the tracking map
-        treasureChestManager.removeOpenInventory(player.getUniqueId());
+        // Apply rewards
+        plugin.getRewardManager().applyRewards(player);
     }
 }

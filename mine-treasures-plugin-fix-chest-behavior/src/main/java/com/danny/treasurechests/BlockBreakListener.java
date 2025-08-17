@@ -2,9 +2,12 @@ package com.danny.treasurechests;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
 
 public class BlockBreakListener implements Listener {
 
@@ -20,12 +23,45 @@ public class BlockBreakListener implements Listener {
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
-        final org.bukkit.entity.Player player = event.getPlayer();
+        final Player player = event.getPlayer();
         final Location location = event.getBlock().getLocation();
 
         // Check if the block was placed by a player
         if (treasureChestManager.isPlayerPlacedBlock(location)) {
             treasureChestManager.removePlayerPlacedBlock(location); // Clean up the entry
+            return;
+        }
+
+        ItemStack itemInHand = player.getInventory().getItemInMainHand();
+        if (itemInHand.hasItemMeta() && itemInHand.getItemMeta().getPersistentDataContainer().has(plugin.getNamespacedKey("golden_pickaxe"), PersistentDataType.BOOLEAN)) {
+            event.setDropItems(false);
+            itemInHand.setAmount(0);
+
+            Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+                final LootManager.LootResult lootResult = lootManager.calculateLootForTier("legendary");
+                if (lootResult != null && !lootResult.getItems().isEmpty()) {
+                    Bukkit.getScheduler().runTask(plugin, () -> {
+                        plugin.getDisplayManager().spawnTreasure(location, lootResult, player);
+                        if (lootResult.getTier().isBroadcastEnabled()) {
+                            String message = plugin.getMessageManager().getMessage("treasure-found", "%player%", player.getName(), "%tier%", lootResult.getTier().getDisplayName());
+                            Bukkit.broadcastMessage(message);
+                        }
+                        SoundInfo soundInfo = lootResult.getTier().getSoundInfo();
+                        String soundName = soundInfo.getName();
+                        try {
+                            if (soundInfo.shouldBroadcast()) {
+                                for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+                                    onlinePlayer.playSound(onlinePlayer.getLocation(), soundName, 1.0f, 1.0f);
+                                }
+                            } else {
+                                player.playSound(player.getLocation(), soundName, 1.0f, 1.0f);
+                            }
+                        } catch (Exception e) {
+                            plugin.getLogger().warning(plugin.getMessageManager().getMessage("sound-error", "%sound%", soundName));
+                        }
+                    });
+                }
+            });
             return;
         }
 
@@ -46,7 +82,7 @@ public class BlockBreakListener implements Listener {
 
         // Asynchronously calculate the loot
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            final LootManager.LootResult lootResult = lootManager.calculateRandomLoot();
+            final LootManager.LootResult lootResult = lootManager.calculateRandomLoot(player);
 
             // If loot was successfully calculated, schedule the spawning back on the main thread
             if (lootResult != null && !lootResult.getItems().isEmpty()) {
@@ -55,12 +91,9 @@ public class BlockBreakListener implements Listener {
                     plugin.getDisplayManager().spawnTreasure(location, lootResult, player);
 
                     // Send feedback to the server
-                    if (plugin.getConfig().getBoolean("broadcast-message-toggle", true)) {
-                        String message = plugin.getConfig().getString("broadcast-message", "&e%player% found a %tier% treasure chest!");
-                        String tierName = lootResult.getTier().getDisplayName();
-
-                        message = message.replace("%player%", player.getName()).replace("%tier%", tierName);
-                        Bukkit.broadcastMessage(org.bukkit.ChatColor.translateAlternateColorCodes('&', message));
+                    if (lootResult.getTier().isBroadcastEnabled()) {
+                        String message = plugin.getMessageManager().getMessage("treasure-found", "%player%", player.getName(), "%tier%", lootResult.getTier().getDisplayName());
+                        Bukkit.broadcastMessage(message);
                     }
 
                     // Play sound based on tier settings
@@ -75,7 +108,7 @@ public class BlockBreakListener implements Listener {
                             player.playSound(player.getLocation(), soundName, 1.0f, 1.0f);
                         }
                     } catch (Exception e) {
-                        plugin.getLogger().warning("Ein Fehler ist beim Abspielen des Sounds '" + soundName + "' aufgetreten. Ist der Sound-Name gültig?");
+                        plugin.getLogger().warning(plugin.getMessageManager().getMessage("sound-error", "%sound%", soundName));
                     }
                 });
             }

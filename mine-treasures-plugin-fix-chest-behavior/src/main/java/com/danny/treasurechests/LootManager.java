@@ -6,6 +6,7 @@ import com.danny.treasurechests.Animation.ScaleEffect;
 import com.danny.treasurechests.Animation.SoundEffect;
 import org.bukkit.Particle;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -56,7 +57,7 @@ public class LootManager {
                 double speed = particleMap.get("speed") != null ? (double) particleMap.get("speed") : 0.1;
                 particleEffects.add(new ParticleEffect(type, count, speed));
             } catch (Exception e) {
-                plugin.getLogger().warning("Fehler beim Verarbeiten eines Partikeleffekts in der Konfiguration: " + e.getMessage());
+                plugin.getLogger().warning(plugin.getMessageManager().getMessage("config-error", "%path%", "animations.particles", "%error%", e.getMessage()));
             }
         }
 
@@ -101,6 +102,9 @@ public class LootManager {
             AnimationInfo spawnAnimation = parseAnimationInfo(tierSection.getConfigurationSection("animations.spawn"));
             AnimationInfo despawnAnimation = parseAnimationInfo(tierSection.getConfigurationSection("animations.despawn"));
 
+            boolean broadcastEnabled = tierSection.getBoolean("broadcast-enabled", false);
+            String broadcastMessage = tierSection.getString("broadcast-message", "&6&lSCHATZFUND! &e%player% &7hat eine &e%tier% &7Schatztruhe gefunden!");
+
 
             List<LootItem> items = new ArrayList<>();
             List<Map<?, ?>> itemMaps = tierSection.getMapList("items");
@@ -110,7 +114,7 @@ public class LootManager {
                     String materialName = (String) itemMap.get("material");
                     org.bukkit.Material material = org.bukkit.Material.getMaterial(materialName.toUpperCase());
                     if (material == null) {
-                        plugin.getLogger().warning("Ungültiges Material '" + materialName + "' in Stufe '" + tierName + "'. Gegenstand wird übersprungen.");
+                        plugin.getLogger().warning(plugin.getMessageManager().getMessage("invalid-material", "%material%", materialName, "%tier%", tierName));
                         continue;
                     }
 
@@ -128,30 +132,30 @@ public class LootManager {
 
                     items.add(new LootItem(material, amount, chance));
                 } catch (Exception e) {
-                    plugin.getLogger().severe("Fehler beim Verarbeiten eines Gegenstands in Stufe '" + tierName + "'. Fehler: " + e.getMessage());
+                    plugin.getLogger().severe(plugin.getMessageManager().getMessage("config-error", "%path%", "items", "%error%", e.getMessage()));
                 }
             }
 
             if (items.isEmpty()) {
-                plugin.getLogger().warning("Keine gültigen Gegenstände für Stufe '" + tierName + "'. Diese Stufe wird übersprungen.");
+                plugin.getLogger().warning(plugin.getMessageManager().getMessage("no-valid-items", "%tier%", tierName));
                 continue;
             }
 
-            LootTier lootTier = new LootTier(tierName, displayName, headTexture, tierChance, soundInfo, items, spawnAnimation, despawnAnimation);
+            LootTier lootTier = new LootTier(tierName, displayName, headTexture, tierChance, soundInfo, items, spawnAnimation, despawnAnimation, broadcastEnabled, broadcastMessage);
             lootTiers.put(tierName, lootTier);
             totalTierChance += tierChance;
             plugin.getLogger().info("Stufe '" + tierName + "' mit " + items.size() + " Gegenständen geladen.");
         }
 
         if (lootTiers.isEmpty()) {
-            plugin.getLogger().severe("Keine gültigen Beutestufen geladen! Das Plugin wird nicht korrekt funktionieren.");
+            plugin.getLogger().severe(plugin.getMessageManager().getMessage("no-loot-tiers"));
         } else {
             plugin.getLogger().info("Erfolgreich " + lootTiers.size() + " Beutestufen geladen.");
         }
     }
 
-    public LootResult calculateRandomLoot() {
-        LootTier chosenTier = chooseRandomTier();
+    public LootResult calculateRandomLoot(Player player) {
+        LootTier chosenTier = chooseRandomTier(player);
         if (chosenTier == null) {
             return null;
         }
@@ -173,19 +177,50 @@ public class LootManager {
         return new LootResult(chosenTier, items);
     }
 
-    private LootTier chooseRandomTier() {
+    public LootResult calculateLootForTier(String tierName) {
+        LootTier chosenTier = lootTiers.get(tierName);
+        if (chosenTier == null) {
+            return null;
+        }
+
+        List<ItemStack> items = new ArrayList<>();
+        int rolls = parseAmount(plugin.getConfig().getString("loot-tables.rolls", "1"));
+
+        for (int i = 0; i < rolls; i++) {
+            LootItem chosenItem = chooseRandomItem(chosenTier);
+            if (chosenItem != null) {
+                items.add(createItemStack(chosenItem));
+            }
+        }
+
+        if (items.isEmpty()) {
+            return null; // If after all rolls no items were selected, return null
+        }
+
+        return new LootResult(chosenTier, items);
+    }
+
+    private LootTier chooseRandomTier(Player player) {
         if (lootTiers.isEmpty()) {
             return null;
         }
 
-        double randomValue = random.nextDouble() * totalTierChance;
-        double cumulativeWeight = 0.0;
-
-        // Using an ordered list to have a guaranteed last element for the failsafe
+        double luckMultiplier = plugin.getLuckBoosterManager().getLuckMultiplier(player);
+        double adjustedTotalChance = 0;
         List<LootTier> tiers = new ArrayList<>(lootTiers.values());
+        Map<LootTier, Double> adjustedChances = new HashMap<>();
 
         for (LootTier tier : tiers) {
-            cumulativeWeight += tier.getChance();
+            double adjustedChance = tier.getChance() * luckMultiplier;
+            adjustedChances.put(tier, adjustedChance);
+            adjustedTotalChance += adjustedChance;
+        }
+
+        double randomValue = random.nextDouble() * adjustedTotalChance;
+        double cumulativeWeight = 0.0;
+
+        for (LootTier tier : tiers) {
+            cumulativeWeight += adjustedChances.get(tier);
             if (randomValue < cumulativeWeight) {
                 return tier;
             }
