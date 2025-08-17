@@ -130,6 +130,7 @@ public class LootManager {
                     }
 
                     String customItem = (String) itemMap.get("custom-item");
+                    java.util.List<String> potionEffects = (java.util.List<String>) itemMap.get("potion-effects");
                     String amount = "1";
                     Object amountObj = itemMap.get("amount");
                     if (amountObj != null) {
@@ -142,7 +143,7 @@ public class LootManager {
                         chance = ((Number) chanceObj).doubleValue();
                     }
 
-                    items.add(new LootItem(material, customItem, amount, chance));
+                    items.add(new LootItem(material, customItem, amount, chance, potionEffects));
                 } catch (Exception e) {
                     plugin.getLogger().severe(plugin.getMessageManager().getMessage("config-error", "%path%", "items", "%error%", e.getMessage()));
                 }
@@ -266,8 +267,29 @@ public class LootManager {
                 return plugin.getItemManager().createLuckBooster(item.getCustomItem());
             } else if (item.getCustomItem().equalsIgnoreCase("golden_pickaxe")) {
                 return plugin.getItemManager().createGoldenPickaxe();
+            } else if (item.getCustomItem().equalsIgnoreCase("infinity_water_bucket")) {
+                return plugin.getItemManager().createInfinityWaterBucket();
             }
         }
+
+        if (item.getMaterial() == org.bukkit.Material.POTION && item.getPotionEffects() != null) {
+            ItemStack potion = new ItemStack(item.getMaterial(), parseAmount(item.getAmount()));
+            org.bukkit.inventory.meta.PotionMeta meta = (org.bukkit.inventory.meta.PotionMeta) potion.getItemMeta();
+            for (String effect : item.getPotionEffects()) {
+                String[] parts = effect.split(":");
+                if (parts.length == 3) {
+                    org.bukkit.potion.PotionEffectType type = org.bukkit.potion.PotionEffectType.getByName(parts[0]);
+                    int amplifier = Integer.parseInt(parts[1]) - 1;
+                    int duration = Integer.parseInt(parts[2]) * 20; // in ticks
+                    if (type != null) {
+                        meta.addCustomEffect(new org.bukkit.potion.PotionEffect(type, duration, amplifier), true);
+                    }
+                }
+            }
+            potion.setItemMeta(meta);
+            return potion;
+        }
+
         return new ItemStack(item.getMaterial(), parseAmount(item.getAmount()));
     }
 

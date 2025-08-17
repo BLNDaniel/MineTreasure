@@ -227,3 +227,10 @@ items:
     display-name: "&bUnendlicher Wassereimer"
     lore:
       - "&7Dieser Eimer geht niemals leer."
+
+# Potions can be added to loot tables like this:
+# - material: "POTION"
+#   potion-effects:
+#     - "STRENGTH:2:60" # Effect:Amplifier:Duration(seconds)
+#   amount: 1
+#   chance: 0.1
